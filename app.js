@@ -11,6 +11,13 @@ var express = require('express')
 
 var app = express();
 
+var users = {
+	'napster' : {
+		name : 'zhangxiaojian',
+		website : 'https://github.com/napster99'
+	}
+};
+
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
@@ -27,8 +34,17 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+// app.all('/users/:username',function(req, res, next) {
+// 	//检查用户是否存在
+// 	if (users[req.params.username]) {
+// 		next();
+// 	} else {
+// 		next(new Error(req.params.username + ' does not exist.'));
+// 	}
+// });
+
 app.get('/', routes.index);
-app.get('/users', user.list);
+app.get('/users/:username', user.list);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
