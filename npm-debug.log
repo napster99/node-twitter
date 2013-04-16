@@ -1,0 +1,16 @@
+218 error Error: read ECONNRESET
+218 error     at errnoException (net.js:878:11)
+218 error     at TCP.onread (net.js:539:19)
+219 error If you need help, you may report this log at:
+219 error     <http://github.com/isaacs/npm/issues>
+219 error or email it to:
+219 error     <npm-@googlegroups.com>
+220 error System Windows_NT 6.1.7601
+221 error command "D:\\nodejs\\\\node.exe" "D:\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "i"
+222 error cwd E:\nodehome\node-twitter
+223 error node -v v0.10.2
+224 error npm -v 1.2.15
+225 error syscall read
+226 error code ECONNRESET
+227 error errno ECONNRESET
+228 verbose exit [ 1, true ]
