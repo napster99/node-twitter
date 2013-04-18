@@ -27,8 +27,17 @@ app.configure(function() {
     store : new MongoStore({db : settings.db})
   }));
 
-  app.use(app.router);
+  // app.use(app.router);
   // app.use(express.router(routes));
+
+
+  app.use(function(req, res, next) {
+    res.locals.success = req.session? req.session.success : null;
+    res.locals.user = req.session? req.session.user : null;
+    res.locals.error = req.session? req.session.error : null;
+
+    next();
+  });
 
 
   app.use(express.static(path.join(__dirname,'public')));
@@ -38,9 +47,6 @@ app.configure(function() {
 app.configure('development',function() {
   app.use(express.errorHandler());
 });
-
-
-
 
 
 http.createServer(app).listen(app.get('port'),function() {
