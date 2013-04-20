@@ -46,6 +46,7 @@ Post.prototype.save = function save(callback) {
 };
 
 Post.get = function get(username, callback) {
+	console.log('post get username>>'+username);
 	mongodb.open(function(err,db) {
 		if(err) {
 			return callback(err);
@@ -66,13 +67,15 @@ Post.get = function get(username, callback) {
 				if(err) {
 					callback(err, null);
 				}
-
+				console.log('封装posts为Post对象'+docs);
 				//封装posts为Post对象
 				var posts = [];
 				docs.forEach(function(doc, index) {
 					var post = new Post(doc.user,doc.post,doc.time);
 					posts.push(post);
 				});
+				console.log('endednednenend');
+				callback(err,posts);
 			});
 		});
 	});

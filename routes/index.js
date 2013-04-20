@@ -11,7 +11,7 @@ module.exports = function(app) {
 
 	var crypto = require('crypto');
 	var User = require('../models/user');
-
+	var Post = require('../models/post');
 
 
 	app.get('/',function(req, res) {
@@ -109,4 +109,38 @@ module.exports = function(app) {
 		res.redirect('/');
 	});
 
+	app.post('/post',function(res, req) {
+		var currentUser = req.session.user;
+		var post = new Post(currentUser.name, req.body.post);
+		post.save(function(err) {
+			if(err) {
+				req.session.error = err;
+				return res.redirect('/');
+			}
+			req.session.success = '发表成功';
+			res.redirect('/u/'+currentUser.name);
+		});
+	});
+
+	app.get('/u/:user', function(req, res) {
+		console.log('req.params.user>>'+req.params.user);
+		User.get(req.params.user, function(err, user) {
+			console.log(' 从数据库中返回的user>>'+user);
+			if(!user) {
+				req.session.error = '用户名不存在';
+				return res.redirect('/');
+			}
+			Post.get(user.name,function(err, posts) {
+				console.log('post get 返回>>'+posts.length);
+				if(err) {
+					req.session.error = err;
+					return res.redirect('/');
+				}
+				res.render('user', {
+					title : user.name,
+					posts : posts 
+				});
+			});
+		});
+	});
 };
