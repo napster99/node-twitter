@@ -109,8 +109,10 @@ module.exports = function(app) {
 		res.redirect('/');
 	});
 
-	app.post('/post',function(res, req) {
+	app.post('/post',function(req, res) {
+		console.log('post 请求已经达到后台....')
 		var currentUser = req.session.user;
+		console.log(currentUser.name+'  '+req.body.post);
 		var post = new Post(currentUser.name, req.body.post);
 		post.save(function(err) {
 			if(err) {
