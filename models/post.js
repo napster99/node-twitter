@@ -45,7 +45,7 @@ Post.prototype.save = function save(callback) {
 	});
 };
 
-Post.get = function get(username, callback) {
+Post.get = function get(username, callback, isAll) {
 	console.log('post get username>>'+username);
 	mongodb.open(function(err,db) {
 		if(err) {
@@ -57,6 +57,10 @@ Post.get = function get(username, callback) {
 				mongodb.close();
 				return callback(err);
 			}
+			for(var i in collection.find() ){
+				console.log(i)
+			}
+			
 			//查找user属性为username的文档，如果username是null则匹配全部
 			var query = {};
 			if(username) {
@@ -67,7 +71,7 @@ Post.get = function get(username, callback) {
 				if(err) {
 					callback(err, null);
 				}
-				console.log('封装posts为Post对象'+docs);
+				
 				//封装posts为Post对象
 				var posts = [];
 				docs.forEach(function(doc, index) {

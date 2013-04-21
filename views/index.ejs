@@ -1,27 +1,17 @@
 <%- include header %>
 
-<div class="hero-unit">
-	<h1>欢迎来到Napblog</h1>
-	<p>Napblog是一个基于Node.js的微博系统。</p>
-	<p>
-		<a class="btn btn-primary btn-large" href="/login">登录</a>
-		<a class="btn btn-large" href="/reg">立即注册</a>
-	</p>
-</div>
+<% if(!locals.user) { %>
+	<div class="hero-unit">
+		<h1>欢迎来到Napblog</h1>
+		<p>Napblog是一个基于Node.js的微博系统。</p>
+		<p>
+			<a class="btn btn-primary btn-large" href="/login">登录</a>
+			<a class="btn btn-large" href="/reg">立即注册</a>
+		</p>
+	</div>
+<%  } else { %>
+	<%- partial('say')  %>
+<% } %>
 
-<div class="row">
-	<div class="span4">
-		<h2>Carbo 说</h2>
-		<p>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
-	</div>
-	<div class="span4">
-		<h2>Carbo 说</h2>
-		<p>人涉卬否是否按时飞萨芬士大夫我让他一文钱而扼腕任务人情味儿为惹我惹我惹我他而给V发帅哥 个的个儿特讨厌人U乳液如果破诶个无人敢惹热物品他</p>
-	</div>
-	<div class="span4">
-		<h2>Carbo 说</h2>
-		<p>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
-	</div>
-</div>
 
 <%- include footer %>
