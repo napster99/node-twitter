@@ -1,5 +1,4 @@
 var mongodb = require('./db');
-console.log("models user.js")
 
 function User(user) {
 	this.name = user.name;
@@ -49,18 +48,15 @@ User.get = function get(username, callback) {
 				mongodb.close();
 				return callback(err);
 			}
-			console.log('findOne>>>'+username);
 			//查找name属性为username的文档
 			collection.findOne({name : username}, function(err, doc) {
 				mongodb.close();
 				if(doc) {
-					console.log(11111111111);
 					//封装文档为User对象
 					var user = new User(doc);
 					console.log(user);
 					callback(err,user);
 				} else {
-					console.log(222222222222);
 					callback(err,null);
 				}
 			});

@@ -62,7 +62,6 @@ module.exports = function(app) {
 		User.get(newUser.name, function(err, user) {
 			console.log(user)
 			if(user) {
-				console.log('用户名已经存在');
 				err = 'usernameisexsit';
 			}
 			if(err) {
@@ -138,6 +137,7 @@ module.exports = function(app) {
 		User.get(req.params.user, function(err, user) {
 			if(!user) {
 				req.session.error = '用户名不存在';
+				req.session.success = '';
 				return res.redirect('/');
 			}
 			Post.get(user.name,function(err, posts) {
