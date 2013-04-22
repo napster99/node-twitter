@@ -15,9 +15,25 @@ module.exports = function(app) {
 
 
 	app.get('/',function(req, res) {
-		res.render('index',{
-			title : '首页'
-		});
+		
+		try{
+			Post.getPostsByCount(9,function(err, posts) {
+
+				if(err) {
+					req.session.error = err;
+					return res.redirect('/');
+				}
+				
+				res.render('index',{
+					title : '首页',
+					posts : posts
+				});
+				
+			});
+		}catch(e){
+			console.log('异常异常异常')
+		}
+		
 	});
 
 	app.get('/reg', function(req, res) {
@@ -27,8 +43,6 @@ module.exports = function(app) {
 	});
 
 	app.post('/reg',function(req, res) {
-		// console.log('xxxxqwewewq'+req.body['password-repeat']);
-		// console.log('xxcvxv>'+req.body['password']);
 		//检测用户两次输入的口令是否一致
 		if(req.body['password-repeat'] != req.body['password']) {
 			req.session.error = 'pwdnothesanme';
@@ -38,9 +52,7 @@ module.exports = function(app) {
 		//生成口令的散列值
 		var md5 = crypto.createHash('md5');
 		var password = md5.update(req.body.password).digest('base64');
-// console.log('页面中的username>>'+req.body.username);
-// console.log('页面中的密码>加密前：'+req.body.password);
-// console.log('加密后>'+password);
+
 		var newUser = new User({
 			 name : req.body.username,
 			 password : password
@@ -110,9 +122,7 @@ module.exports = function(app) {
 	});
 
 	app.post('/post',function(req, res) {
-		console.log('post 请求已经达到后台....')
 		var currentUser = req.session.user;
-		console.log(currentUser.name+'  '+req.body.post);
 		var post = new Post(currentUser.name, req.body.post);
 		post.save(function(err) {
 			if(err) {
@@ -125,15 +135,12 @@ module.exports = function(app) {
 	});
 
 	app.get('/u/:user', function(req, res) {
-		console.log('req.params.user>>'+req.params.user);
 		User.get(req.params.user, function(err, user) {
-			console.log(' 从数据库中返回的user>>'+user);
 			if(!user) {
 				req.session.error = '用户名不存在';
 				return res.redirect('/');
 			}
 			Post.get(user.name,function(err, posts) {
-				console.log('post get 返回>>'+posts.length);
 				if(err) {
 					req.session.error = err;
 					return res.redirect('/');
@@ -145,4 +152,7 @@ module.exports = function(app) {
 			});
 		});
 	});
+
+
+
 };

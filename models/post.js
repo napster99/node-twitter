@@ -45,8 +45,8 @@ Post.prototype.save = function save(callback) {
 	});
 };
 
-Post.get = function get(username, callback, isAll) {
-	console.log('post get username>>'+username);
+Post.get = function get(username, callback) {
+	
 	mongodb.open(function(err,db) {
 		if(err) {
 			return callback(err);
@@ -56,9 +56,6 @@ Post.get = function get(username, callback, isAll) {
 			if(err) {
 				mongodb.close();
 				return callback(err);
-			}
-			for(var i in collection.find() ){
-				console.log(i)
 			}
 			
 			//查找user属性为username的文档，如果username是null则匹配全部
@@ -78,9 +75,46 @@ Post.get = function get(username, callback, isAll) {
 					var post = new Post(doc.user,doc.post,doc.time);
 					posts.push(post);
 				});
-				console.log('endednednenend');
 				callback(err,posts);
 			});
 		});
 	});
 };
+
+ Post.getPostsByCount = function getPostsByCount(count, callback){
+ 	mongodb.open(function(err,db) {
+ 		if(err) {
+ 			return callback(err);
+ 		}
+
+ 		db.collection('posts', function(err, collection) {
+ 			if(err) {
+ 				mongodb.close();
+ 				return callback(err);
+ 			}
+
+ 			collection.find().sort({time : -1}).toArray(function(err, docs) {
+ 				mongodb.close();
+				if(err) {
+					callback(err);
+				} 				
+
+				var posts = [];
+				docs.forEach(function(doc, index) {
+					var post = new Post(doc.user, doc.post, doc.time);
+					posts.push(post);
+				});
+				if(posts.length >= count) {
+					posts = posts.splice(0,count);
+					callback('',posts);
+				}else{
+					callback('',posts);	
+				}
+
+				
+ 			});
+
+ 		});
+ 	});
+ };
+
